@@ -7,35 +7,53 @@
 import SwiftUI
 
 struct DogBreedView: View {
-    var breeds = ["dog1", "dog2", "dog3", "dog11", "dog12", "dog13", "dog21", "dog22", "dog23", "dog31", "dog32", "dog33"]
-    @State private var selectedBreed = "dog1"
-    
+    @StateObject private var dogViewModel = DogVM()
+        
     var body: some View {
         ZStack {
             Color.gray
                 .edgesIgnoringSafeArea(.all)
+                .opacity(0.05)
             
             VStack {
-                Text(selectedBreed)
+                Text(dogViewModel.dogBreed)
                     .font(.system(size: 36, weight: .bold))
-                    .font(.headline)
                     .foregroundColor(.black)
             
-                Picker("Select breed", selection: $selectedBreed) {
-                    ForEach(breeds, id: \.self) {
+                Picker("Select breed", selection: $dogViewModel.dogBreed) {
+                    ForEach(dogViewModel.dogBreedList, id: \.self) {
                         Text($0)
                     }
+                }
+                .onChange(of: dogViewModel.dogBreed) { newBreed in
+                    print("Called from onChange:")
+                    dogViewModel.fetchDogByBreed(breed: newBreed)
+//                    dogSelected(dogViewModel.dogBreed)
                 }
                 .pickerStyle(.wheel)
                 
                 Spacer()
                 
-                Image(systemName: "arrowshape.turn.up.right.circle")
+                Image(uiImage: dogViewModel.dogImage)
                     .resizable()
+                    .frame(maxWidth: 450, maxHeight: 500)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.black.opacity(0.5), lineWidth: 2)
+                    )
             }
             .padding()
         }
+        .onAppear {
+            print("Called from onApper:")
+            dogViewModel.fetchBreedList()
+            dogViewModel.fetchDogByBreed(breed: dogViewModel.dogBreed)
+        }
     }
+    
+//    func dogSelected(_ option: String) {
+//        dogViewModel.dogBreed = option
+//    }
 }
 
 struct DogBreedView_Previews: PreviewProvider {

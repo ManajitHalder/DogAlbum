@@ -45,8 +45,8 @@
 			children = (
 				C4A592F82A8677CD00E732D9 /* DogMainView.swift */,
 				C4A450C52A87AA6800D92025 /* DogRandomView.swift */,
-				C4A450C72A87B62400D92025 /* TestView.swift */,
 				C4A32C192A892C4700A4C153 /* DogBreedView.swift */,
+				C4A450C72A87B62400D92025 /* TestView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -72,7 +72,7 @@
 			children = (
 				C4A592F62A8677CD00E732D9 /* DogViewerApp.swift */,
 				C4A450C42A87A9FA00D92025 /* View */,
-				C4A593042A8678E300E732D9 /* DogVM.swift */,
+				C4AFDEEB2A9705BD000D125F /* ViewModel */,
 				C4A592FA2A8677D100E732D9 /* Assets.xcassets */,
 				C4A592FC2A8677D100E732D9 /* Preview Content */,
 			);
@@ -85,6 +85,14 @@
 				C4A592FD2A8677D100E732D9 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		C4AFDEEB2A9705BD000D125F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C4A593042A8678E300E732D9 /* DogVM.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

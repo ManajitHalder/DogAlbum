@@ -7,18 +7,20 @@
 import SwiftUI
 
 struct DogRandomView: View {
-    @StateObject var dogViewModel = DogVM()
+    @StateObject private var dogViewModel = DogVM()
     
     var body: some View {
         ZStack {
             Color.gray
                 .edgesIgnoringSafeArea(.all)
+                .opacity(0.05)
             
             VStack {
                 NavigationView {
                     ZStack {
                         Color.gray
                             .edgesIgnoringSafeArea(.all)
+                            .opacity(0.17)
                         
                         VStack {
                             Text(dogViewModel.dogBreed)
@@ -28,29 +30,43 @@ struct DogRandomView: View {
                                 .font(.title2)
                                 .fontWeight(.bold)
                                 .fontDesign(.rounded)
-                                .foregroundColor(Color.teal)
+                                .foregroundColor(Color.black)
+                                .border(.black, width: 2.5)
+                                .cornerRadius(7)
                             
                             Image(uiImage: dogViewModel.dogImage)
                                 .resizable()
-                                .frame(width: 400, height: 450, alignment: .bottom)
+                                .frame(maxWidth: 450, maxHeight: 500, alignment: .bottom)
+                                .border(.black, width: 5)
+                                .cornerRadius(7)
                         
                             Button {
-                                dogViewModel.fetchDog()
+                                dogViewModel.fetchRandomDog()
                             } label: {
                                 Image(systemName: "arrowshape.turn.up.right.circle")
                                     .resizable()
                                     .frame(width: 40, height: 40)
-                                    .foregroundColor(Color.teal)
+                                    .foregroundColor(Color.black)
                             }
                         }
-                        .padding()
-                        .navigationTitle("Dog World")
-                        .navigationBarTitleDisplayMode(.automatic)
+                        .padding(.bottom, 10)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .principal) {
+                                HStack {
+                                    Spacer()
+                                    Text("Dogs")
+                                        .font(.system(size: 35, weight: .bold, design: .serif))
+                                    Spacer()
+                                }
+                            }
+                        }
                         .onAppear {
-                            dogViewModel.fetchDog()
+                            dogViewModel.fetchRandomDog()
                         }
                     }
                 }
+                .cornerRadius(30)
             }
             .padding()
         }

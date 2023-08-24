@@ -11,6 +11,7 @@ struct TestView: View {
         ZStack {
             Color.gray
                 .edgesIgnoringSafeArea(.all)
+                .opacity(0.05)
             
             Text("Test View")
         }

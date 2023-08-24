@@ -7,6 +7,8 @@
 import SwiftUI
 
 struct DogMainView: View {
+//    @StateObject private var dogViewModel = DogVM()
+//    @State private var selectedBreed = ""
     
     var body: some View {
         ZStack {

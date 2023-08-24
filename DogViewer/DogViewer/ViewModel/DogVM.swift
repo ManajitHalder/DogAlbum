@@ -8,22 +8,41 @@ import Foundation
 import UIKit
 
 struct Dog: Codable {
-    let status: String
     let message: String
+    let status: String
+}
+
+struct BreedList: Codable {
+    let message: [String: [String]]
+    let status: String
 }
 
 struct DogDetail {
     let image: UIImage
     let breed: String
+    let breedList: [String]
 }
 
 class DogVM: ObservableObject {
-    enum EndPoint: String {
-        case randomDogUrl = "https://dog.ceo/api/breeds/image/random"
-        case breedUrl = "https://dog.ceo/api/breeds/image/randoms"
-        
+
+    enum EndPoint {
+        case randomDogUrl
+        case randomBreedUrl(String)
+        case listAllBreeds
+
         var url: URL {
-            URL(string: DogVM.EndPoint.randomDogUrl.rawValue)!
+            return URL(string: self.stringValue)!
+        }
+        
+        var stringValue: String {
+            switch self {
+            case .randomDogUrl:
+                return "https://dog.ceo/api/breeds/image/random"
+            case .randomBreedUrl(let breed):
+                return "https://dog.ceo/api/breed/\(breed)/images/random"
+            case .listAllBreeds:
+                return "https://dog.ceo/api/breeds/list/all"
+            }
         }
     }
     
@@ -31,6 +50,7 @@ class DogVM: ObservableObject {
 //    @Published var dogDetail: DogDetail
     @Published var dogImage = UIImage()
     @Published var dogBreed: String = ""
+    @Published var dogBreedList: [String] = []
     
     /*
      Dog breed url is https://images.dog.ceo/breeds/hound-afghan/n02088094_2738.jpg
@@ -65,7 +85,7 @@ class DogVM: ObservableObject {
             }
             
             guard let imageFromData = UIImage(data: data) else {
-                print("UIImage failed")
+                print("fetchImageFile: UIImage failed")
                 return
             }
             completionHandler(imageFromData, nil)
@@ -90,11 +110,22 @@ class DogVM: ObservableObject {
         task.resume()
     }
     
-    func fetchDog() {
-        guard let url = URL(string: EndPoint.randomDogUrl.rawValue) else {
+    func fetchDogByBreed(breed: String) {
+        print("Dog Breed: \(self.dogBreed)")
+        guard let url = URL(string: EndPoint.randomBreedUrl(breed.isEmpty ? self.dogBreed: breed).stringValue) else {
             return
         }
-       
+        fetchDog(url: url, breed)
+    }
+    
+    func fetchRandomDog() {
+        guard let url = URL(string: EndPoint.randomDogUrl.stringValue) else {
+            return
+        }
+        fetchDog(url: url)
+    }
+    
+    func fetchDog(url: URL, _ breed: String? = nil) {
         DogVM.requestRandomImage(url: url) { jsonData, error in
             guard let jsonData = jsonData else {
                 print("Invalid jsonData")
@@ -106,19 +137,61 @@ class DogVM: ObservableObject {
                 return
             }
             
-            let dogbreed = self.dogBreed(jsonData.message)
-        
+            var dogbreed: String = ""
+            if breed == nil {
+                dogbreed = self.dogBreed(jsonData.message)
+            }
+            
             DogVM.fetchImageFile(url: imageURL) { image, error in
                 guard let image = image else {
                     print("fetchImageFile: image fetch failed")
                     return
                 }
-                DispatchQueue.main.async {
-                    self.dogImage = image
-                    self.dogBreed = dogbreed
+                DispatchQueue.main.async { [weak self] in
+                    print("Image displayed:::")
+                    self?.dogImage = image
+                    if breed == nil {
+                        self?.dogBreed = dogbreed
+                    }
                 }
             }
+        }
+    }
+    
+    static func requestBreedList(url: URL, completionHandler: @escaping (BreedList?, Error?) -> Void) {
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data else {
+                completionHandler(nil, error)
+                return
+            }
             
+            do {
+                let jsonData = try JSONDecoder().decode(BreedList.self, from: data)
+                completionHandler(jsonData, nil)
+            } catch {
+                print("requestBreedList JSONDecoder error, unable to fetch Dog breed list !!!")
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchBreedList() {
+        guard let url = URL(string: EndPoint.listAllBreeds.stringValue) else {
+            return
+        }
+        
+        DogVM.requestBreedList(url: url) { [self] jsonData, error in
+            guard let jsonData = jsonData else {
+                print("Invalid JSON data in fetchBreedList")
+                return
+            }
+            
+//            print(jsonData.message.keys.map { $0 })
+            
+//            DispatchQueue.main.async { [weak self] in
+                self.dogBreedList = jsonData.message.keys.map { $0 }
+                self.dogBreed = jsonData.message.keys.map { $0 }.first ?? ""
+//            }
         }
     }
     
