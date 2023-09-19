@@ -20,7 +20,7 @@ struct DogRandomView: View {
                     ZStack {
                         Color.gray
                             .edgesIgnoringSafeArea(.all)
-                            .opacity(0.17)
+                            .opacity(0.05)
                         
                         VStack {
                             Text(dogViewModel.dogBreed)
@@ -37,8 +37,10 @@ struct DogRandomView: View {
                             Image(uiImage: dogViewModel.dogImage)
                                 .resizable()
                                 .frame(maxWidth: 450, maxHeight: 500, alignment: .bottom)
-                                .border(.black, width: 5)
-                                .cornerRadius(7)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.black.opacity(0.5), lineWidth: 2)
+                                )
                         
                             Button {
                                 dogViewModel.fetchRandomDog()

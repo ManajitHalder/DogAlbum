@@ -7,16 +7,6 @@
 import Foundation
 import UIKit
 
-struct Dog: Codable {
-    let message: String
-    let status: String
-}
-
-struct BreedList: Codable {
-    let message: [String: [String]]
-    let status: String
-}
-
 struct DogDetail {
     let image: UIImage
     let breed: String
@@ -46,7 +36,6 @@ class DogVM: ObservableObject {
         }
     }
     
-//    @Published var dog: [Dog] = []
 //    @Published var dogDetail: DogDetail
     @Published var dogImage = UIImage()
     @Published var dogBreed: String = ""

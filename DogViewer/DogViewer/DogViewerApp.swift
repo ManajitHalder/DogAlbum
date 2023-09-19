@@ -8,12 +8,10 @@ import SwiftUI
 
 @main
 struct DogViewerApp: App {
-//    @StateObject private var dogViewModel = DogVM()
     
     var body: some Scene {
         WindowGroup {
             DogMainView()
-//                .environmentObject(dogViewModel)
         }
     }
 }

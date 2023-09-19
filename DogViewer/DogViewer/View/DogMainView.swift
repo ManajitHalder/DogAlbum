@@ -7,8 +7,6 @@
 import SwiftUI
 
 struct DogMainView: View {
-//    @StateObject private var dogViewModel = DogVM()
-//    @State private var selectedBreed = ""
     
     var body: some View {
         ZStack {
@@ -28,11 +26,6 @@ struct DogMainView: View {
                     .tabItem {
                         Label("Test", systemImage: "tray.2.fill")
                     }
-                
-                TestView()
-                    .tabItem {
-                        Label("Test", systemImage: "clipboard.fill")
-                    }
             }
         }
     }
@@ -41,6 +34,5 @@ struct DogMainView: View {
 struct DogMainView_Previews: PreviewProvider {
     static var previews: some View {
         DogMainView()
-//            .environmentObject(Test())
     }
 }

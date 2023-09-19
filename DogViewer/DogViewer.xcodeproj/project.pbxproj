@@ -15,6 +15,7 @@
 		C4A592FB2A8677D100E732D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4A592FA2A8677D100E732D9 /* Assets.xcassets */; };
 		C4A592FE2A8677D100E732D9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4A592FD2A8677D100E732D9 /* Preview Assets.xcassets */; };
 		C4A593052A8678E300E732D9 /* DogVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A593042A8678E300E732D9 /* DogVM.swift */; };
+		C4BB28232A97C9C8009B3DB0 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4BB28222A97C9C8009B3DB0 /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		C4A592FA2A8677D100E732D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4A592FD2A8677D100E732D9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C4A593042A8678E300E732D9 /* DogVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogVM.swift; sourceTree = "<group>"; };
+		C4BB28222A97C9C8009B3DB0 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				C4A592F62A8677CD00E732D9 /* DogViewerApp.swift */,
+				C4BB28212A97C9B2009B3DB0 /* Model */,
 				C4A450C42A87A9FA00D92025 /* View */,
 				C4AFDEEB2A9705BD000D125F /* ViewModel */,
 				C4A592FA2A8677D100E732D9 /* Assets.xcassets */,
@@ -93,6 +96,14 @@
 				C4A593042A8678E300E732D9 /* DogVM.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C4BB28212A97C9B2009B3DB0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C4BB28222A97C9C8009B3DB0 /* Model.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +176,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4BB28232A97C9C8009B3DB0 /* Model.swift in Sources */,
 				C4A450C62A87AA6800D92025 /* DogRandomView.swift in Sources */,
 				C4A450C82A87B62400D92025 /* TestView.swift in Sources */,
 				C4A32C1A2A892C4700A4C153 /* DogBreedView.swift in Sources */,
