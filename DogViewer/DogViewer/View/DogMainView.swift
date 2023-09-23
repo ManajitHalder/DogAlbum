@@ -6,6 +6,14 @@
 
 import SwiftUI
 
+struct SliderTab: View {
+    var body: some View {
+        Image("slider")
+            .resizable()
+            .frame(width: 200, height: 200)
+    }
+}
+
 struct DogMainView: View {
     
     var body: some View {
@@ -14,7 +22,11 @@ struct DogMainView: View {
             TabView {
                 DogRandomView()
                     .tabItem {
-                        Label("Random Dog", systemImage: "list.dash")
+                        Label("Random Dog", systemImage: "square.and.pencil")
+////                        SliderTab()
+//                        Image("slider")
+//                            .resizable()
+//                            .scaledToFit()
                     }
                 
                 DogBreedView()
@@ -22,7 +34,7 @@ struct DogMainView: View {
                         Label("Breed View", systemImage: "square.and.pencil")
                     }
                 
-                TestView()
+                DogAllView()
                     .tabItem {
                         Label("Test", systemImage: "tray.2.fill")
                     }

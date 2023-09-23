@@ -13,16 +13,18 @@ struct DogBreedView: View {
         ZStack {
             Color.gray
                 .edgesIgnoringSafeArea(.all)
-                .opacity(0.05)
+                .opacity(0.45)
             
             VStack {
                 Text(dogViewModel.dogBreed)
                     .font(.system(size: 36, weight: .bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(.red)
             
                 Picker("Select breed", selection: $dogViewModel.dogBreed) {
                     ForEach(dogViewModel.dogBreedList, id: \.self) {
                         Text($0)
+                            .foregroundColor(.white)
+                            .fontWeight(.bold)
                     }
                 }
                 .onChange(of: dogViewModel.dogBreed) { newBreed in
