@@ -56,15 +56,27 @@ struct DogViewer: View {
     /*
      Following Gradient Colors were generated from website: https://angrytools.com/gradient/
      */
-    static let color0 = Color(red: 15/255, green: 13/255, blue: 46/255);
-    static let color1 = Color(red: 6/255, green: 82/255, blue: 143/255);
-    let gradient = Gradient(colors: [color0, color1]);
+    static let color0 = Color(red: 177/255, green: 176/255, blue: 174/255);
+    static let color1 = Color(red: 112/255, green: 113/255, blue: 61/255);
+    static let color2 = Color(red: 186/255, green: 190/255, blue: 186/255);
+    let gradient = Gradient(colors: [color0, color1, color2]);
 
     var body: some View {
-        VStack {
+        VStack(spacing: 8) {
             Image(uiImage: dogViewModel.dogImage)
                 .resizable()
-                .frame(maxWidth: .infinity, maxHeight: 200)
+                .frame(maxWidth: .infinity)
+                .frame(height: 260)
+            
+            Rectangle()
+                    .fill(LinearGradient(
+                      gradient: gradient,
+                      startPoint: .init(x: 0.00, y: 0.50),
+                      endPoint: .init(x: 1.00, y: 0.50)
+                    ))
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(height: 3)
+                    .padding(.top, -10)
             
             Text(dogViewModel.dogBreed)
                 .font(.title2)
@@ -73,12 +85,13 @@ struct DogViewer: View {
                 .foregroundColor(Color.black)
 
             Rectangle()
-                .fill(RadialGradient(
-                          gradient: gradient,
-                          center: .center,
-                          startRadius: 1,
-                          endRadius: 100
-                        ))
+                    .fill(LinearGradient(
+                      gradient: gradient,
+                      startPoint: .init(x: 0.00, y: 0.50),
+                      endPoint: .init(x: 1.00, y: 0.50)
+                    ))
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(height: 3)
         }
         .onAppear {
             dogViewModel.fetchRandomDog()
@@ -96,6 +109,9 @@ struct DogDetailView: View {
             Color.gray
                 .edgesIgnoringSafeArea(.all)
                 .opacity(0.45)
+            VStack {
+                Text("Dog Detail View")
+            }
         }
         .onAppear {
             isSearchBarHidden = true
