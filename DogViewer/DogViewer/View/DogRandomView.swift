@@ -15,98 +15,71 @@ struct DogRandomView: View {
             Color.gray
                 .edgesIgnoringSafeArea(.all)
                 .opacity(0.45)
-            
-            VStack {
-                NavigationView {
-                    ZStack {
-                        Color.gray
-                            .edgesIgnoringSafeArea(.all)
-                            .opacity(0.45)
                         
-                        VStack {
-                            Text(dogViewModel.dogBreed)
-                                .padding()
-                                .frame(maxWidth: 450)
-                                .multilineTextAlignment(.center)
-                                .lineLimit(2)
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .fontDesign(.rounded)
-                                .foregroundColor(Color.black)
-                                .border(.black, width: 2.5)
-                                .cornerRadius(7)
-                            
-                            ZStack {
-                                Image(uiImage: dogViewModel.dogImage)
-                                    .resizable()
-                                    .frame(maxWidth: 500, maxHeight: 600, alignment: .bottom)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .stroke(Color.black.opacity(0.5), lineWidth: 2)
-                                    )
-//                                    .overlay(
-//                                        HStack {
-//                                            Spacer()
-//
-//                                            Button {
-//                                                dogViewModel.fetchRandomDog()
-//                                            } label: {
-//                                                Image(systemName: "arrowshape.turn.up.right.circle")
-//                                                    .resizable()
-//                                                    .frame(width: 40, height: 40)
-//                                                    .foregroundColor(Color.black.opacity(0.25))
-//                                            }
-//                                        }
-//                                    )
-                                
-                                if isOverlayActive {
-                                    Color.red.opacity(0.5) // Overlay color with opacity
-                                        .onTapGesture {
-                                            // Action to perform when the overlay is tapped on the right side
-                                            print("Overlay Tapped")
-                                            dogViewModel.fetchRandomDog()
-                                            isOverlayActive = false
-                                        }
-                                        .edgesIgnoringSafeArea(.all)
+            VStack {
+                
+                VStack {
+                    Image(uiImage: dogViewModel.dogDetail.image)
+                        .resizable()
+                        .frame(maxWidth: 500, maxHeight: 650, alignment: .bottom)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.black.opacity(0.5), lineWidth: 2)
+                        )
+                        .overlay(
+                            HStack {
+                                Spacer()
+
+                                Button {
+                                    dogViewModel.fetchRandomDog()
+                                } label: {
+                                    Image(systemName: "arrow.right")
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                        .padding(.trailing, 5)
+                                        .foregroundColor(Color.accentColor.opacity(0.50))
                                 }
                             }
-//                            Button {
-//                                dogViewModel.fetchRandomDog()
-//                            } label: {
-//                                Image(systemName: "arrowshape.turn.up.right.circle")
-//                                    .resizable()
-//                                    .frame(width: 40, height: 40)
-//                                    .foregroundColor(Color.black)
-//                            }
-                            .gesture(
-                                        DragGesture(minimumDistance: 0)
-                                            .onChanged { value in
-                                                if value.location.x >= UIScreen.main.bounds.width / 2 {
-                                                    isOverlayActive = true
-                                                }
-                                            }
+                        )
+                }
+                
+                HStack {
+                    Text(dogViewModel.dogDetail.breed)
+                        .padding()
+                        .font(.custom("Cochin", size: 30))
+                        .lineLimit(1)
+                        .fontDesign(.rounded)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: 400, maxHeight: 50)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .foregroundColor(Color.accentColor)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.black.opacity(0.5), lineWidth: 2)
+                        )
+                    
+                    Button {
+                        dogViewModel.fetchRandomDog()
+                    } label: {
+                        Image(systemName: "arrow.right")
+                            .frame(maxWidth: 50, maxHeight: 50)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.black.opacity(0.5), lineWidth: 2)
                             )
-                        }
-                        .padding(.bottom, 10)
-                        .navigationBarTitleDisplayMode(.inline)
-//                        .toolbar {
-//                            ToolbarItem(placement: .principal) {
-////                                HStack {
-////                                    Spacer()
-////                                    Text("Dogs")
-////                                        .font(.system(size: 35, weight: .bold, design: .serif))
-////                                    Spacer()
-////                                }
-//                            }
-//                        }
-                        .onAppear {
-                            dogViewModel.fetchRandomDog()
-                        }
+                            .foregroundColor(Color.black)
                     }
                 }
-                .cornerRadius(30)
+                .frame(maxHeight: 50)
+                .padding(.top, 7)
+
             }
-            .padding()
+            .padding(.bottom, 5)
+            .padding([.leading, .trailing])
+            
+            .onAppear {
+                dogViewModel.fetchRandomDog()
+            }
         }
     }
 }

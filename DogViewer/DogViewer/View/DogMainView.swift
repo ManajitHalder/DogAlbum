@@ -22,21 +22,17 @@ struct DogMainView: View {
             TabView {
                 DogRandomView()
                     .tabItem {
-                        Label("Random Dog", systemImage: "square.and.pencil")
-////                        SliderTab()
-//                        Image("slider")
-//                            .resizable()
-//                            .scaledToFit()
+                        Label("Random", systemImage: "arrow.triangle.2.circlepath")
                     }
                 
                 DogBreedView()
                     .tabItem {
-                        Label("Breed View", systemImage: "square.and.pencil")
+                        Label("Breed", systemImage: "list.bullet.below.rectangle")
                     }
                 
-                DogAllView()
+                DogGridView()
                     .tabItem {
-                        Label("Test", systemImage: "tray.2.fill")
+                        Label("Grid", systemImage: "rectangle.grid.1x2")
                     }
             }
         }

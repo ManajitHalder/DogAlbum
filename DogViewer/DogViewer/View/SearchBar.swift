@@ -7,18 +7,25 @@
 import SwiftUI
 
 struct SearchBar: View {
-    @State private var searchText = ""
+    @Binding var text: String
     
     var body: some View {
         ZStack {
             HStack {
                 Image(systemName: "magnifyingglass")
                 
-                TextField("dog breed", text: $searchText)
+                TextField("dog breed", text: $text)
+                                
+                Button(action: {
+                    self.text = ""
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                }
                 
-                Image(systemName: "mic.fill")
-                
-                Image(systemName: "camera.metering.spot")
+//                Image(systemName: "mic.fill")
+//
+//                Image(systemName: "camera.metering.spot")
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: 40)
@@ -27,13 +34,15 @@ struct SearchBar: View {
                     .stroke(Color.black.opacity(0.25), lineWidth: 3)
             )
             .padding()
+//            .opacity(text.isEmpty ? 0 : 1)
+//            .animation(.default)
         }
     }
 }
 
 struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBar()
+        SearchBar(text: .constant("DFD"))
             .previewLayout(.fixed(width: .infinity, height: 40))
     }
 }

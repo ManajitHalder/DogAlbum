@@ -10,7 +10,8 @@ struct DogGridView: View {
     @StateObject private var dogViewModel = DogVM()
     @State private var searchText = ""
     @State private var isSearchBarHidden = false // Add a state variable to control the search bar visibility in the current and Detail view.
-        
+//    @State private var items = ["Apple", "Banana", "Cherry", "Date", "Fig", "Grapes"]
+    
     var body: some View {
         ZStack {
             Color.gray
@@ -19,15 +20,21 @@ struct DogGridView: View {
             
             VStack {
                 if isSearchBarHidden == false {
-                    SearchBar()
+                    SearchBar(text: $searchText)
+//                    List {
+//                        ForEach(items, id: \.self) { dog in
+//                            Text(dog)
+//                        }
+//                    }
                 }
                 
                 NavigationView {
                     ScrollView {
                         LazyVStack(spacing: 0) {
-                            ForEach(dogViewModel.dogBreedList, id: \.self) { dog in
-                                NavigationLink(destination: DogDetailView(isSearchBarHidden: $isSearchBarHidden, name: dog)) {
-                                    DogViewer(name: dog)
+//                            ForEach(dogViewModel.dogBreedList, id: \.self) { dog in
+                            ForEach(dogViewModel.dogDetail.breedList, id: \.self) { dog in
+                                NavigationLink(destination: DogDetailView(isSearchBarHidden: $isSearchBarHidden, name: dog, image: dogViewModel.dogDetail.image)) {
+                                    DogViewer(name: dogViewModel.dogDetail.breed)
                                 }
                             }
                         }
@@ -46,12 +53,17 @@ struct DogGridView: View {
             isSearchBarHidden = true
         }
 
+//        func filteredDogs() -> [String] {
+//            // Replace this with your own data and filtering logic
+//            return searchText.isEmpty ? items : items.filter { $0.lowercased().contains(searchText.lowercased()) }
+//        }
     }
 }
 
 struct DogViewer: View {
     @StateObject private var dogViewModel = DogVM()
     var name: String
+//    var dogList: [String] = []
     
     /*
      Following Gradient Colors were generated from website: https://angrytools.com/gradient/
@@ -61,9 +73,10 @@ struct DogViewer: View {
     static let color2 = Color(red: 186/255, green: 190/255, blue: 186/255);
     let gradient = Gradient(colors: [color0, color1, color2]);
 
+    
     var body: some View {
         VStack(spacing: 8) {
-            Image(uiImage: dogViewModel.dogImage)
+            Image(uiImage: dogViewModel.dogDetail.image)
                 .resizable()
                 .frame(maxWidth: .infinity)
                 .frame(height: 260)
@@ -78,7 +91,7 @@ struct DogViewer: View {
                     .frame(height: 3)
                     .padding(.top, -10)
             
-            Text(dogViewModel.dogBreed)
+            Text(dogViewModel.dogDetail.breed)
                 .font(.title2)
                 .fontWeight(.bold)
                 .fontDesign(.rounded)
@@ -95,32 +108,13 @@ struct DogViewer: View {
         }
         .onAppear {
             dogViewModel.fetchRandomDog()
+            dogViewModel.fetchBreedList()
+//            print(dogViewModel.dogDetail.breedList)
+//            self.dogList = dogViewModel.dogBreedList
         }
     }
 }
 
-struct DogDetailView: View {
-    @Binding var isSearchBarHidden: Bool
-    
-    var name: String
-    
-    var body: some View {
-        ZStack {
-            Color.gray
-                .edgesIgnoringSafeArea(.all)
-                .opacity(0.45)
-            VStack {
-                Text("Dog Detail View")
-            }
-        }
-        .onAppear {
-            isSearchBarHidden = true
-        }
-        .onDisappear {
-            isSearchBarHidden = false
-        }
-    }
-}
 
 struct DogGridView_Previews: PreviewProvider {
     static var previews: some View {

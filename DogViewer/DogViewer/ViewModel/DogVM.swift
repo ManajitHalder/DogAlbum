@@ -8,9 +8,9 @@ import Foundation
 import UIKit
 
 struct DogDetail {
-    let image: UIImage
-    let breed: String
-    let breedList: [String]
+    var image: UIImage = UIImage()
+    var breed: String = ""
+    var breedList: [String] = []
 }
 
 class DogVM: ObservableObject {
@@ -36,7 +36,7 @@ class DogVM: ObservableObject {
         }
     }
     
-//    @Published var dogDetail: DogDetail
+    @Published var dogDetail: DogDetail = DogDetail()
     @Published var dogImage = UIImage()
     @Published var dogBreed: String = ""
     @Published var dogBreedList: [String] = []
@@ -115,7 +115,7 @@ class DogVM: ObservableObject {
     }
     
     func fetchDog(url: URL, _ breed: String? = nil) {
-        DogVM.requestRandomImage(url: url) { jsonData, error in
+        DogVM.requestRandomImage(url: url) { [self] jsonData, error in
             guard let jsonData = jsonData else {
                 print("Invalid jsonData")
                 return
@@ -129,6 +129,7 @@ class DogVM: ObservableObject {
             var dogbreed: String = ""
             if breed == nil {
                 dogbreed = self.dogBreed(jsonData.message)
+//                self.dogDetail.breed = self.dogBreed(jsonData.message)
             }
             
             DogVM.fetchImageFile(url: imageURL) { image, error in
@@ -139,8 +140,10 @@ class DogVM: ObservableObject {
                 DispatchQueue.main.async { [weak self] in
                     print("Image displayed:::")
                     self?.dogImage = image
+                    self?.dogDetail.image = image
                     if breed == nil {
                         self?.dogBreed = dogbreed
+                        self?.dogDetail.breed = dogbreed
                     }
                 }
             }
@@ -177,22 +180,25 @@ class DogVM: ObservableObject {
             
 //            print(jsonData.message.keys.map { $0 })
             
-//            DispatchQueue.main.async { [weak self] in
-                self.dogBreedList = jsonData.message.keys.map { $0 }
-                self.dogBreed = jsonData.message.keys.map { $0 }.first ?? ""
-//            }
+            DispatchQueue.main.async { [weak self] in
+                self?.dogBreedList = jsonData.message.keys.map { $0 }
+                self?.dogBreed = jsonData.message.keys.map { $0 }.first ?? ""
+            
+                self?.dogDetail.breedList = jsonData.message.keys.map { $0 }
+                self?.dogDetail.breed = jsonData.message.keys.map { $0 }.first ?? ""
+            }
         }
     }
     
-    func handleImageFileResponse(image: UIImage?, error: Error?) {
-        guard let image = image else {
-            print("fetchImageFile: image fetch failed")
-            return
-        }
-        
-        DispatchQueue.main.async { [self] in
-            self.dogImage = image
-            self.dogBreed = dogBreed
-        }
-    }
+//    func handleImageFileResponse(image: UIImage?, error: Error?) {
+//        guard let image = image else {
+//            print("fetchImageFile: image fetch failed")
+//            return
+//        }
+//
+//        DispatchQueue.main.async { [self] in
+//            self.dogImage = image
+//            self.dogBreed = dogBreed
+//        }
+//    }
 }

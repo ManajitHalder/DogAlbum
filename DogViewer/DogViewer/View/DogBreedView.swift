@@ -16,18 +16,18 @@ struct DogBreedView: View {
                 .opacity(0.45)
             
             VStack {
-                Text(dogViewModel.dogBreed)
+                Text(dogViewModel.dogDetail.breed)
                     .font(.system(size: 36, weight: .bold))
-                    .foregroundColor(.red)
+                    .foregroundColor(.accentColor)
             
-                Picker("Select breed", selection: $dogViewModel.dogBreed) {
-                    ForEach(dogViewModel.dogBreedList, id: \.self) {
+                Picker("Select breed", selection: $dogViewModel.dogDetail.breed) {
+                    ForEach(dogViewModel.dogDetail.breedList, id: \.self) {
                         Text($0)
                             .foregroundColor(.white)
                             .fontWeight(.bold)
                     }
                 }
-                .onChange(of: dogViewModel.dogBreed) { newBreed in
+                .onChange(of: dogViewModel.dogDetail.breed) { newBreed in
                     print("Called from onChange:")
                     dogViewModel.fetchDogByBreed(breed: newBreed)
 //                    dogSelected(dogViewModel.dogBreed)
@@ -36,9 +36,9 @@ struct DogBreedView: View {
                 
                 Spacer()
                 
-                Image(uiImage: dogViewModel.dogImage)
+                Image(uiImage: dogViewModel.dogDetail.image)
                     .resizable()
-                    .frame(maxWidth: 450, maxHeight: 500)
+                    .frame(maxWidth: 450, maxHeight: 600)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.black.opacity(0.5), lineWidth: 2)
@@ -52,10 +52,6 @@ struct DogBreedView: View {
             dogViewModel.fetchDogByBreed(breed: dogViewModel.dogBreed)
         }
     }
-    
-//    func dogSelected(_ option: String) {
-//        dogViewModel.dogBreed = option
-//    }
 }
 
 struct DogBreedView_Previews: PreviewProvider {
