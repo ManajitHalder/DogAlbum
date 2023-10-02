@@ -75,6 +75,7 @@ struct DogViewer: View {
     
     var body: some View {
         VStack(spacing: 8) {
+            
             Image(uiImage: dogViewModel.dogDetail.image)
                 .resizable()
                 .frame(maxWidth: .infinity)

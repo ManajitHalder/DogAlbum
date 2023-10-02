@@ -19,16 +19,8 @@ struct DogDetailView: View {
             
             ScrollView {
                 VStack {
-                    ZStack {
-                        Circle()
-                            .fill(.red)
-                            .padding()
-                            .frame(width: 400, height: 400)
-                            
-                        Image(uiImage: dogViewModel.dogDetail.image)
-                            .resizable()
-                            .scaledToFit()
-                    }
+                    CustomDogImageView(dogImage: dogViewModel.dogDetail.image)
+                        .padding()
                     
                     Text(name)
                         .padding(.bottom, 10)
@@ -85,6 +77,38 @@ struct DogDetailView: View {
         .onDisappear {
             isSearchBarHidden = false
         }
+    }
+}
+
+struct CustomDogImageView: View {
+    var dogImage: UIImage
+    @State private var isImageLoaded = false
+    
+    var body: some View {
+        ZStack {
+            if isImageLoaded {
+                Image(uiImage: dogImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 350, maxHeight: 350)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.accentColor, lineWidth: 2))
+                    .shadow(radius: 5)
+                    .mask(RoundedRectangle(cornerRadius: 20))
+                    .transition(.opacity) // Apply a fade-in transition
+            } else {
+                ProgressView() // Show a loading spinner while the image is loading
+                    .progressViewStyle(CircularProgressViewStyle(tint: .accentColor))
+                    .frame(width: 350, height: 350)
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                // Simulate image loading for 2 seconds
+                isImageLoaded = true
+            }
+        }
+        .animation(.easeInOut(duration: 0.5), value: isImageLoaded) // Apply a fade-in animation
     }
 }
 
