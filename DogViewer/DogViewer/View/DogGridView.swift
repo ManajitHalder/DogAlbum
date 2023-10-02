@@ -31,10 +31,9 @@ struct DogGridView: View {
                 NavigationView {
                     ScrollView {
                         LazyVStack(spacing: 0) {
-//                            ForEach(dogViewModel.dogBreedList, id: \.self) { dog in
                             ForEach(dogViewModel.dogDetail.breedList, id: \.self) { dog in
-                                NavigationLink(destination: DogDetailView(isSearchBarHidden: $isSearchBarHidden, name: dog, image: dogViewModel.dogDetail.image)) {
-                                    DogViewer(name: dogViewModel.dogDetail.breed)
+                                NavigationLink(destination: DogDetailView(isSearchBarHidden: $isSearchBarHidden, name: dog)) {
+                                    DogViewer(name: dog)
                                 }
                             }
                         }
@@ -91,7 +90,7 @@ struct DogViewer: View {
                     .frame(height: 3)
                     .padding(.top, -10)
             
-            Text(dogViewModel.dogDetail.breed)
+            Text(name)
                 .font(.title2)
                 .fontWeight(.bold)
                 .fontDesign(.rounded)
@@ -107,8 +106,9 @@ struct DogViewer: View {
                     .frame(height: 3)
         }
         .onAppear {
-            dogViewModel.fetchRandomDog()
-            dogViewModel.fetchBreedList()
+            dogViewModel.fetchDogByBreed(breed: name)
+//            dogViewModel.fetchRandomDog()
+//            dogViewModel.fetchBreedList()
 //            print(dogViewModel.dogDetail.breedList)
 //            self.dogList = dogViewModel.dogBreedList
         }

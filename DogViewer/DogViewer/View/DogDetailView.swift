@@ -10,7 +10,6 @@ struct DogDetailView: View {
     @Binding var isSearchBarHidden: Bool
     @StateObject private var dogViewModel = DogVM()
     var name: String
-    var image: UIImage
     
     var body: some View {
         ZStack {
@@ -26,11 +25,12 @@ struct DogDetailView: View {
                             .padding()
                             .frame(width: 400, height: 400)
                             
-                        Image(uiImage: dogViewModel.dogImage)
+                        Image(uiImage: dogViewModel.dogDetail.image)
+                            .resizable()
+                            .scaledToFit()
                     }
                     
-                    //Text("name")
-                    Text(dogViewModel.dogBreed)
+                    Text(name)
                         .padding(.bottom, 10)
                         .font(.custom("Cochin", size: 40))
                         .minimumScaleFactor(0.3)
@@ -53,8 +53,6 @@ struct DogDetailView: View {
                         .padding([.leading, .trailing, .bottom], 10)
                         .multilineTextAlignment(.leading)
                         .font(.custom("Cochin", size: 25))
-    //                    .minimumScaleFactor(0.3)
-    //                    .shadow(radius: 2, x: 3, y: 3)
                     
                     Text("India, North Andaman")
                         .padding(.bottom, 10)
@@ -82,7 +80,7 @@ struct DogDetailView: View {
         }
         .onAppear {
             isSearchBarHidden = true
-            dogViewModel.fetchDogByBreed(breed: dogViewModel.dogBreed)
+            dogViewModel.fetchDogByBreed(breed: name)
         }
         .onDisappear {
             isSearchBarHidden = false
@@ -92,6 +90,6 @@ struct DogDetailView: View {
 
 struct DogDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DogDetailView(isSearchBarHidden: .constant(true), name: "", image: UIImage())
+        DogDetailView(isSearchBarHidden: .constant(true), name: "")
     }
 }

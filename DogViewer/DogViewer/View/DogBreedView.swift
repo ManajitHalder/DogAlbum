@@ -49,7 +49,7 @@ struct DogBreedView: View {
         .onAppear {
             print("Called from onApper:")
             dogViewModel.fetchBreedList()
-            dogViewModel.fetchDogByBreed(breed: dogViewModel.dogBreed)
+            //dogViewModel.fetchDogByBreed(breed: dogViewModel.dogDetail.breed)
         }
     }
 }

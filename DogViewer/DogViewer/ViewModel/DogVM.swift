@@ -37,9 +37,6 @@ class DogVM: ObservableObject {
     }
     
     @Published var dogDetail: DogDetail = DogDetail()
-    @Published var dogImage = UIImage()
-    @Published var dogBreed: String = ""
-    @Published var dogBreedList: [String] = []
     
     /*
      Dog breed url is https://images.dog.ceo/breeds/hound-afghan/n02088094_2738.jpg
@@ -61,7 +58,7 @@ class DogVM: ObservableObject {
      return arr[arr.count - 2]
      */
     
-    func dogBreed(_ breed: String) -> String {
+    func getDogBreed(_ breed: String) -> String {
         let arr = breed.components(separatedBy: "/")
         return arr[arr.count - 2]
     }
@@ -100,8 +97,8 @@ class DogVM: ObservableObject {
     }
     
     func fetchDogByBreed(breed: String) {
-        print("Dog Breed: \(self.dogBreed)")
-        guard let url = URL(string: EndPoint.randomBreedUrl(breed.isEmpty ? self.dogBreed: breed).stringValue) else {
+        print("Dog Breed: \(self.dogDetail.breed)")
+        guard let url = URL(string: EndPoint.randomBreedUrl(breed.isEmpty ? self.dogDetail.breed: breed).stringValue) else {
             return
         }
         fetchDog(url: url, breed)
@@ -128,7 +125,7 @@ class DogVM: ObservableObject {
             
             var dogbreed: String = ""
             if breed == nil {
-                dogbreed = self.dogBreed(jsonData.message)
+                dogbreed = self.getDogBreed(jsonData.message)
 //                self.dogDetail.breed = self.dogBreed(jsonData.message)
             }
             
@@ -139,10 +136,10 @@ class DogVM: ObservableObject {
                 }
                 DispatchQueue.main.async { [weak self] in
                     print("Image displayed:::")
-                    self?.dogImage = image
+//                    self?.dogImage = image
                     self?.dogDetail.image = image
                     if breed == nil {
-                        self?.dogBreed = dogbreed
+//                        self?.dogBreed = dogbreed
                         self?.dogDetail.breed = dogbreed
                     }
                 }
@@ -181,8 +178,8 @@ class DogVM: ObservableObject {
 //            print(jsonData.message.keys.map { $0 })
             
             DispatchQueue.main.async { [weak self] in
-                self?.dogBreedList = jsonData.message.keys.map { $0 }
-                self?.dogBreed = jsonData.message.keys.map { $0 }.first ?? ""
+//                self?.dogBreedList = jsonData.message.keys.map { $0 }
+//                self?.dogBreed = jsonData.message.keys.map { $0 }.first ?? ""
             
                 self?.dogDetail.breedList = jsonData.message.keys.map { $0 }
                 self?.dogDetail.breed = jsonData.message.keys.map { $0 }.first ?? ""
