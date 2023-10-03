@@ -74,8 +74,7 @@ struct DogRandomView: View {
                 .padding(.top, 7)
 
             }
-            .padding(.bottom, 5)
-            .padding([.leading, .trailing])
+            .padding([.leading, .trailing, .bottom])
             
             .onAppear {
                 dogViewModel.fetchRandomDog()

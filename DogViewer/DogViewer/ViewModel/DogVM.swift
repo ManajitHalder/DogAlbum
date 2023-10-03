@@ -112,7 +112,7 @@ class DogVM: ObservableObject {
     }
     
     func fetchDogByBreed(breed: String) {
-        print("Dog Breed: \(self.dogDetail.breed)")
+//        print("Dog Breed: \(self.dogDetail.breed)")
         guard let url = URL(string: EndPoint.randomBreedUrl(breed.isEmpty ? self.dogDetail.breed: breed).stringValue) else {
             return
         }

@@ -10,7 +10,6 @@ struct DogGridView: View {
     @StateObject private var dogViewModel = DogVM()
     @State private var searchText = ""
     @State private var isSearchBarHidden = false // Add a state variable to control the search bar visibility in the current and Detail view.
-//    @State private var items = ["Apple", "Banana", "Cherry", "Date", "Fig", "Grapes"]
     
     var body: some View {
         ZStack {
@@ -42,20 +41,12 @@ struct DogGridView: View {
             }
         }
         .onAppear {
-//            print("Called from onApper:")
             dogViewModel.fetchBreedList()
-//            dogViewModel.fetchDogByBreed(breed: dogViewModel.dogBreed)
-            //dogViewModel.fetchRandomDog()
             isSearchBarHidden = false
         }
         .onDisappear {
             isSearchBarHidden = true
         }
-
-//        func filteredDogs() -> [String] {
-//            // Replace this with your own data and filtering logic
-//            return searchText.isEmpty ? items : items.filter { $0.lowercased().contains(searchText.lowercased()) }
-//        }
     }
 }
 
@@ -108,10 +99,6 @@ struct DogViewer: View {
         }
         .onAppear {
             dogViewModel.fetchDogByBreed(breed: name)
-//            dogViewModel.fetchRandomDog()
-//            dogViewModel.fetchBreedList()
-//            print(dogViewModel.dogDetail.breedList)
-//            self.dogList = dogViewModel.dogBreedList
         }
     }
 }
