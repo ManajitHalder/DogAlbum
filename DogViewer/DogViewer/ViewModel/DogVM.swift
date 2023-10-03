@@ -143,24 +143,7 @@ class DogVM: ObservableObject {
                 dogbreed = self.getDogBreed(jsonData.message)
             }
             
-            if let breed = breed {
-                DogVM.fetchImageFile(url: imageURL, breed: breed, completionHandler: handleBreedFetchResponse(image:breedName:error:))
-            } else {
-                DogVM.fetchImageFile(url: imageURL, breed: breed) { image, breed, error in
-                    guard let image = image else {
-                        print("fetchImageFile: image fetch failed")
-                        return
-                    }
-                    DispatchQueue.main.async { [weak self] in
-                        print("Image displayed:::")
-                        self?.dogDetail.image = image
-                        if breed == nil {
-                            print("breed is nil")
-                            self?.dogDetail.breed = dogbreed
-                        }
-                    }
-                }
-            }
+            DogVM.fetchImageFile(url: imageURL, breed: breed != nil ? breed : dogbreed, completionHandler: handleBreedFetchResponse(image:breedName:error:))
         }
     }
     
@@ -191,7 +174,6 @@ class DogVM: ObservableObject {
                 print("Invalid JSON data in fetchBreedList")
                 return
             }
-            
 //            print(jsonData.message.keys.map { $0 })
             
             DispatchQueue.main.async { [weak self] in
@@ -200,18 +182,6 @@ class DogVM: ObservableObject {
             }
         }
     }
-    
-//    func handleImageFileResponse(image: UIImage?, error: Error?) {
-//        guard let image = image else {
-//            print("fetchImageFile: image fetch failed")
-//            return
-//        }
-//
-//        DispatchQueue.main.async { [self] in
-//            self.dogImage = image
-//            self.dogBreed = dogBreed
-//        }
-//    }
     
     func handleBreedFetchResponse(image: UIImage?, breedName: String?, error: Error?) {
             guard let image = image else {
