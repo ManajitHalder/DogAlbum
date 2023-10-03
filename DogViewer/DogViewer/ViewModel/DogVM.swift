@@ -36,6 +36,9 @@ class DogVM: ObservableObject {
         }
     }
     
+    // For caching images locally once the image is fetched by breed.
+    static var dogImageCache: [String: UIImage] = [:]
+    
     @Published var dogDetail: DogDetail = DogDetail()
     
     /*
@@ -63,20 +66,32 @@ class DogVM: ObservableObject {
         return arr[arr.count - 2]
     }
     
-    static func fetchImageFile(url: URL, completionHandler: @escaping (UIImage?, Error?) -> Void) {
-        let imageFetchTask = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data else {
-                completionHandler(nil, error)
-                return
+    static func fetchImageFile(url: URL, breed: String?, completionHandler: @escaping (UIImage?, String?, Error?) -> Void) {
+        // Use the image if it was cached earlier, otherwise fetch it from the dog.ceo server.
+        if let breed = breed, let cachedImage = dogImageCache[breed] {
+//                print("fetchImageFile: using cached image")
+                completionHandler(cachedImage, breed, nil)
+        } else {
+            let imageFetchTask = URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data = data else {
+                    completionHandler(nil, nil, error)
+                    return
+                }
+                
+                guard let imageFromData = UIImage(data: data) else {
+                    print("fetchImageFile: UIImage failed")
+                    return
+                }
+                if let breed = breed {
+                    // Cache the dog image locally so that next fetch uses it from the cache instead of refetching from the dog.ceo server.
+                    dogImageCache[breed] = imageFromData
+//                    print("fetchImageFile: caching image")
+                }
+                
+                completionHandler(imageFromData, breed, nil)
             }
-            
-            guard let imageFromData = UIImage(data: data) else {
-                print("fetchImageFile: UIImage failed")
-                return
-            }
-            completionHandler(imageFromData, nil)
+            imageFetchTask.resume()
         }
-        imageFetchTask.resume()
     }
         
     static func requestRandomImage(url: URL, completionHandler: @escaping (Dog?, Error?) -> Void) {
@@ -126,21 +141,23 @@ class DogVM: ObservableObject {
             var dogbreed: String = ""
             if breed == nil {
                 dogbreed = self.getDogBreed(jsonData.message)
-//                self.dogDetail.breed = self.dogBreed(jsonData.message)
             }
             
-            DogVM.fetchImageFile(url: imageURL) { image, error in
-                guard let image = image else {
-                    print("fetchImageFile: image fetch failed")
-                    return
-                }
-                DispatchQueue.main.async { [weak self] in
-                    print("Image displayed:::")
-//                    self?.dogImage = image
-                    self?.dogDetail.image = image
-                    if breed == nil {
-//                        self?.dogBreed = dogbreed
-                        self?.dogDetail.breed = dogbreed
+            if let breed = breed {
+                DogVM.fetchImageFile(url: imageURL, breed: breed, completionHandler: handleBreedFetchResponse(image:breedName:error:))
+            } else {
+                DogVM.fetchImageFile(url: imageURL, breed: breed) { image, breed, error in
+                    guard let image = image else {
+                        print("fetchImageFile: image fetch failed")
+                        return
+                    }
+                    DispatchQueue.main.async { [weak self] in
+                        print("Image displayed:::")
+                        self?.dogDetail.image = image
+                        if breed == nil {
+                            print("breed is nil")
+                            self?.dogDetail.breed = dogbreed
+                        }
                     }
                 }
             }
@@ -178,9 +195,6 @@ class DogVM: ObservableObject {
 //            print(jsonData.message.keys.map { $0 })
             
             DispatchQueue.main.async { [weak self] in
-//                self?.dogBreedList = jsonData.message.keys.map { $0 }
-//                self?.dogBreed = jsonData.message.keys.map { $0 }.first ?? ""
-            
                 self?.dogDetail.breedList = jsonData.message.keys.map { $0 }
                 self?.dogDetail.breed = jsonData.message.keys.map { $0 }.first ?? ""
             }
@@ -198,4 +212,21 @@ class DogVM: ObservableObject {
 //            self.dogBreed = dogBreed
 //        }
 //    }
+    
+    func handleBreedFetchResponse(image: UIImage?, breedName: String?, error: Error?) {
+            guard let image = image else {
+                print("handleImageFileResponse: image fetch failed")
+                return
+            }
+    
+            guard let breedName = breedName else {
+                print("handleImageFileResponse: dog breed nil")
+                return
+            }
+        
+            DispatchQueue.main.async { [self] in
+                self.dogDetail.image = image
+                self.dogDetail.breed = breedName
+            }
+        }
 }

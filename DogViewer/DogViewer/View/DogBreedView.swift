@@ -30,7 +30,6 @@ struct DogBreedView: View {
                 .onChange(of: dogViewModel.dogDetail.breed) { newBreed in
                     print("Called from onChange:")
                     dogViewModel.fetchDogByBreed(breed: newBreed)
-//                    dogSelected(dogViewModel.dogBreed)
                 }
                 .pickerStyle(.wheel)
                 
@@ -49,7 +48,6 @@ struct DogBreedView: View {
         .onAppear {
             print("Called from onApper:")
             dogViewModel.fetchBreedList()
-            //dogViewModel.fetchDogByBreed(breed: dogViewModel.dogDetail.breed)
         }
     }
 }
